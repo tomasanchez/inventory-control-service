@@ -3,6 +3,7 @@ package org.inventory.control.model.product;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -11,6 +12,8 @@ import org.inventory.core.database.PersistentEntity;
 @Entity
 public class Product extends PersistentEntity {
 
+    @Column(unique = true)
+    private String code;
     private String name;
     private String description;
     private Double price;
@@ -44,6 +47,15 @@ public class Product extends PersistentEntity {
 
     public Product setPrice(Double price) {
         this.price = price;
+        return this;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public Product setCode(String code) {
+        this.code = code;
         return this;
     }
 
