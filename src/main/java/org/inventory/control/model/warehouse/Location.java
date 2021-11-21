@@ -3,7 +3,6 @@ package org.inventory.control.model.warehouse;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,8 +31,7 @@ public class Location extends PersistentEntity {
     public LocationCode code;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
-    @Column(nullable = false)
+    @JoinColumn(referencedColumnName = "id", name = "warehouse")
     private WareHouse warehouse;
 
 
