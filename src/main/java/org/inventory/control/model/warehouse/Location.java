@@ -2,6 +2,7 @@ package org.inventory.control.model.warehouse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -68,7 +69,7 @@ public class Location extends PersistentEntity {
      * @return the sum of units
      */
     public int getTotalUnits() {
-        return getInventories().stream().mapToInt(i -> i.getUnits()).sum();
+        return getInventories().stream().mapToInt(Inventory::getUnits).sum();
     }
 
     /**
@@ -82,13 +83,30 @@ public class Location extends PersistentEntity {
 
         if (getInventories().size() < MAX_PRODUCTS) {
             inventories.add(inventory);
-        } else {
+        }
+
+        try {
+            Inventory i = getInventory(inventory);
+            i.addUnits(inventory.getUnits());
+        } catch (NoSuchElementException e) {
             throw new LocationFullException("Cannot add another product, location already contains "
                     + MAX_PRODUCTS + " products");
         }
 
+
         return this;
     }
 
+    /**
+     * Provides the inventory of a product.
+     * 
+     * @param inventory and inventory to be checked.
+     * @return
+     */
+    private Inventory getInventory(Inventory inventory) {
+        return getInventories().stream()
+                .filter(i -> i.getProduct().getCode().equals(inventory.getProduct().getCode()))
+                .findFirst().orElseThrow();
+    }
 
 }

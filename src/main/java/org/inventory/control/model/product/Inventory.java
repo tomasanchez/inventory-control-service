@@ -10,8 +10,6 @@ import org.inventory.core.database.PersistentEntity;
 @Entity
 public class Inventory extends PersistentEntity {
 
-
-
     @ManyToOne
     private Product product;
 
@@ -45,6 +43,11 @@ public class Inventory extends PersistentEntity {
     }
 
     public Inventory setUnits(int units) {
+        this.units = units;
+        return this;
+    }
+
+    public Inventory addUnits(int units) {
         validateUnits(units);
         return this;
     }
@@ -58,10 +61,16 @@ public class Inventory extends PersistentEntity {
      */
     private void validateUnits(int units) {
 
-        int newTotal = getLocation().getTotalUnits() + units;
+        int newTotal = 0;
+
+        try {
+            newTotal = getLocation().getTotalUnits() + units;
+        } catch (NullPointerException e) {
+            newTotal = this.units + units;
+        }
 
         if (newTotal <= Location.MAX_UNITS) {
-            this.units = units;
+            this.units += units;
         } else {
             throw new LocationFullException("Location is full - cannot contain " + newTotal);
         }
