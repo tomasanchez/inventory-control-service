@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface WareHousesRepository extends CrudRepository<WareHouse, Long> {
-    @Query(value = "SELECT * FROM Product WHERE code = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM ware_house WHERE code = ?1", nativeQuery = true)
     WareHouse findByCode(String code);
 }
