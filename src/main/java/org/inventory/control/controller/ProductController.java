@@ -3,7 +3,7 @@ package org.inventory.control.controller;
 import java.util.Map;
 import com.google.gson.Gson;
 import org.inventory.control.model.product.Product;
-import org.inventory.control.repositories.ProductRepository;
+import org.inventory.control.repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ProductController {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductsRepository productRepository;
 
 
     @PostMapping(path = "/products", produces = "application/json")
