@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import org.inventory.core.database.PersistentEntity;
 
@@ -18,6 +19,9 @@ public class Product extends PersistentEntity {
     private String code;
     private String name;
     private String description;
+    private String imageUrl;
+    @Transient
+    private int stock;
     private Double price;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -59,6 +63,30 @@ public class Product extends PersistentEntity {
     public Product setCode(String code) {
         this.code = code;
         return this;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public Product setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+        return this;
+    }
+
+    public List<Inventory> getInventories() {
+        return inventories;
+    }
+
+    public Product addToInventory(Inventory inventory) {
+        inventory.setProduct(this);
+        getInventories().add(inventory);
+        return this;
+    }
+
+    public int getStock() {
+        this.stock = getInventories().stream().mapToInt(Inventory::getUnits).sum();
+        return this.stock;
     }
 
 }
